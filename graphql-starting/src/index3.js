@@ -5,11 +5,8 @@ import { GraphQLServer } from "graphql-yoga";
 // String // Boolean // Int // Float // ID 
 const typeDefs = `
     type Query  {
-        grades:[Int!]!,
-        greetings(name: String, location: String) : String!,
-        sum(number1: Int!, number2: Int!): Int!,
-        me: User!,
-        post: blog!,
+       me: User!,
+       post: blog!,
     },
 
     type User {
@@ -27,17 +24,6 @@ const typeDefs = `
 `
 const resolvers = {
     Query :{
-        grades() {
-            return [20,30,]
-        },
-        sum(parent, args){
-            return args.number1 + args.number2
-        },
-        greetings(parent, args) {
-            const name = args.name ? args.name : 'sankha' ;
-            const location = args.location ? args.location : 'India';
-            return `Welcome ! ${name} from ${location}` ;
-        },
         me() {
             return {
                 id: 'abc-123',
