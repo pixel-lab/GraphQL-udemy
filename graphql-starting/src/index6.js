@@ -1,5 +1,5 @@
 import { GraphQLServer } from "graphql-yoga";
-import uuidv4 from 'uuid/v4'; 
+
 //Type Definition (schema)
 const Users = [
     {id: '1',name : 'Sankha Banerjee',email: 'sankha@city.com', age: 32, post:'1'},
@@ -31,9 +31,7 @@ const typeDefs = `
         me: User!
         post: blog!
     },
-    type Mutation {
-        addUserToList(name:String!, email:String!, age: ID): [User]!
-    }
+
     type User {
         id: ID!,
         name : String!,
@@ -85,26 +83,6 @@ const resolvers = {
                 body: 'Hope is good thing, maybe the best thing, no good thing ever dies',
                 isPublished: true
             }
-        }
-    },
-    Mutation: {
-        addUserToList(parent, args, ctx, info) {
-            const checkExisting = Users.some(i => i.email === args.email);
-            let usr = {
-                id: uuidv4(),
-                name : args.name,
-                email: args.email,
-                age: args.age,
-            };
-
-            if(!checkExisting){               
-                Users.push(usr);
-                return [usr];
-            }
-            else {
-                throw new Error('Email id is already exits');
-            }
-            
         }
     },
     blog: {
