@@ -8,8 +8,15 @@ type Query  {
     type Mutation {
         addUserToList(data: addUserToListInput!): [User]!,
         deleteUserFromList(id:ID!): [User]!
+        updateUserFromList(data:updateUserFromListInput): User!
         addPost(data:addPostInput!): blog!
         addComment(data:addCommentInput!) : Comment!
+    }
+    input updateUserFromListInput {
+        id:ID!
+        name:String
+        email:String
+        age: ID
     }
     input addUserToListInput {
         name:String!

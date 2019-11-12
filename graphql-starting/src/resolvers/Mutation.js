@@ -47,6 +47,32 @@ const Mutation = {
         return newUser;
 
     },
+    updateUserFromList(parent, args, { db }, info){
+        const  {id, name, email, age}  = args.data;
+
+        const user = db.Users.find(i => i.id === id);
+        if(!user){
+            throw new Error('Invalid user');
+        }
+        
+        if(typeof email !== 'undefined'){
+            const checkEmail = db.Users.some(i => i.email === email);
+            if(checkEmail){
+                throw new Error('Email id already exits');
+            }
+            user.email = email;
+        }
+        
+        if(typeof name !== 'undefined'){
+            user.name = name;
+        }
+
+        if(typeof age !== 'undefined'){
+            user.age = age;
+        }
+        return user;
+
+    },
     addPost(parent, args, { db }, info) {
         const checkExisting = db.Users.some(i => i.id === args.data.author);
         if (checkExisting) {
