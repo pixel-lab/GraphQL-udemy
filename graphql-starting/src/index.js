@@ -32,9 +32,25 @@ const typeDefs = `
         post: blog!
     },
     type Mutation {
-        addUserToList(name:String!, email:String!, age: ID): [User]!,
-        addPost(title:String!, body:String!, isPublished: Boolean!, author: ID!): blog!
-        addComment(text:String!,author:ID!, post:ID!) : Comment!
+        addUserToList(data: addUserToListInput): [User]!,
+        addPost(data:addPostInput): blog!
+        addComment(data:addCommentInput) : Comment!
+    }
+    input addUserToListInput {
+        name:String!
+        email:String!
+        age: ID
+    }
+    input addPostInput {
+        title:String!
+        body:String!
+        isPublished: Boolean!
+        author: ID!
+    }
+    input addCommentInput {
+        text:String!
+        author:ID!     
+        post: ID!
     }
     type User {
         id: ID!,
@@ -91,13 +107,11 @@ const resolvers = {
     },
     Mutation: {
         addComment(parent, args, ctx, info){
-            const checkExisting = Users.some(i => i.id === args.post) && blogData.some(i => i.id === args.post);  
+            const checkExisting = Users.some(i => i.id === args.data.post) && blogData.some(i => i.id === args.data.post);  
             if(checkExisting){
                 let usr = {
                     id: uuidv4(),
-                    text : args.text,
-                    author: args.author,
-                    post: args.post,
+                   ...args.data
                 };            
                 postcomments.push(usr);
                 return usr;
@@ -107,13 +121,11 @@ const resolvers = {
             }
         },
         addUserToList(parent, args, ctx, info) {
-            const checkExisting = Users.some(i => i.email === args.email);  
+            const checkExisting = Users.some(i => i.email === args.data.email);  
             if(!checkExisting){   
                 let usr = {
                     id: uuidv4(),
-                    name : args.name,
-                    email: args.email,
-                    age: args.age,
+                    ...args.data
                 };            
                 Users.push(usr);
                 return [usr];
@@ -124,14 +136,11 @@ const resolvers = {
             
         },
         addPost(parent, args, ctx, info) { 
-            const checkExisting = Users.some(i => i.id === args.author);
+            const checkExisting = Users.some(i => i.id === args.data.author);
             if(checkExisting){
             const post = {
                 id: uuidv4(),
-                title : args.title,
-                body: args.body,
-                isPublished: args.isPublished,
-                author: args.author
+                ...args.data
             }
             blogData.push(post);
             return post;
