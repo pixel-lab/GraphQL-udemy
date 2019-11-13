@@ -1,4 +1,4 @@
-type Query  {
+    type Query  {
         Posts(name:String): [blog]!
         Users(name:String): [User]!
         Comment: [Comment]!
@@ -11,6 +11,9 @@ type Query  {
         updateUserFromList(data:updateUserFromListInput): User!
         addPost(data:addPostInput!): blog!
         addComment(data:addCommentInput!) : Comment!
+    }
+    type Subscription {
+        count: Int!
     }
     input updateUserFromListInput {
         id:ID!

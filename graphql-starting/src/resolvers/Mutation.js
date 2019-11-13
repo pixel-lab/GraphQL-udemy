@@ -87,6 +87,7 @@ const Mutation = {
             throw new Error('not a valid author');
         }
     }
+    
 }
 
 export {Mutation as default}
