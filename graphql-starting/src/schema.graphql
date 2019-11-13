@@ -6,7 +6,7 @@
         post: blog!
     },
     type Mutation {
-        addUserToList(data: addUserToListInput!): [User]!,
+        addUserToList(data: addUserToListInput!): [User]!
         deleteUserFromList(id:ID!): [User]!
         updateUserFromList(data:updateUserFromListInput): User!
         addPost(data:addPostInput!): blog!
@@ -14,6 +14,7 @@
     }
     type Subscription {
         count: Int!
+        Comment(postid:ID!): Comment!
     }
     input updateUserFromListInput {
         id:ID!

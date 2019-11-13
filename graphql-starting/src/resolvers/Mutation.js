@@ -2,15 +2,20 @@ import uuidv4 from 'uuid/v4';
 
 
 const Mutation = {
-    addComment(parent, args, { db }, info) {
+    addComment(parent, args, { db, pubsub }, info) {
         const checkExisting = db.Users.some(i => i.id === args.data.post) && db.blogData.some(i => i.id === args.data.post);
         if (checkExisting) {
-            let usr = {
+            let Comment = {
                 id: uuidv4(),
                 ...args.data
             };
-            db.postcomments.push(usr);
-            return usr;
+            db.postcomments.push(Comment);
+
+            pubsub.publish(`comment ${args.data.post}`, {
+                Comment
+            });
+
+            return Comment;
         }
         else {
             throw new Error('Not a valid comment, please check the userid or post id');

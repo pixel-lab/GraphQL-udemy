@@ -11,6 +11,16 @@ const Subscription = {
             },1000);
             return  pubsub.asyncIterator('count')
         }
+    },
+    Comment : {
+        subscribe(parent, {postid}, { db,pubsub }, info){  
+            const comment = db.blogData.find(i => i.id == postid);
+            //console.log(postid);
+            if(!comment){
+                throw new Error('Invalid Comment in subscription');
+            }
+            return  pubsub.asyncIterator(`comment ${postid}`);
+        }
     }
 }
 
