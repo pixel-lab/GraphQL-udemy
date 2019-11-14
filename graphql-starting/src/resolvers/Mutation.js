@@ -31,7 +31,7 @@ const Mutation = {
             db.Users.push(usr);
             pubsub.publish(`userSubscription`, {
                 user:{
-                    mutation: 'added',
+                    mutation: 'ADDED',
                     data:usr
                 }
             });
@@ -59,7 +59,7 @@ const Mutation = {
         //console.log(newUser[0]);
         pubsub.publish(`userSubscription`, {
             user:{
-                mutation: 'Deleted',
+                mutation: 'DELETE',
                 data:newUser[0]
             }
         });
@@ -92,7 +92,7 @@ const Mutation = {
 
         pubsub.publish(`userSubscription`, {
             user:{
-                mutation: 'Updated', 
+                mutation: 'UPDATE', 
                 data:user
             }
         });

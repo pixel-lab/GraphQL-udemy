@@ -60,7 +60,12 @@
         author: User!,
         Bulletin: blog!        
     }
+    enum UserMutationValues{
+        UPDATE
+        DELETE
+        ADDED
+    }
     type UserSubscriptionType{
-        mutation: String!,
+        mutation: UserMutationValues!,
         data: User!
     }
