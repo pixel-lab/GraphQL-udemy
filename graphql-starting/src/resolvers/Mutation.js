@@ -21,7 +21,7 @@ const Mutation = {
             throw new Error('Not a valid comment, please check the userid or post id');
         }
     },
-    addUserToList(parent, args, { db }, info) {
+    addUserToList(parent, args, { db,pubsub }, info) {
         const checkExisting = db.Users.some(i => i.email === args.data.email);
         if (!checkExisting) {
             let usr = {
@@ -29,6 +29,12 @@ const Mutation = {
                 ...args.data
             };
             db.Users.push(usr);
+            pubsub.publish(`userSubscription`, {
+                user:{
+                    mutation: 'added',
+                    data:usr
+                }
+            });
             return [usr];
         }
         else {
@@ -36,7 +42,7 @@ const Mutation = {
         }
 
     },
-    deleteUserFromList(parent, args, { db }, info) {
+    deleteUserFromList(parent, args, { db,pubsub }, info) {
         const getIndex = db.Users.findIndex(i => i.id === args.id);
         if (getIndex === -1) {
             throw Error('invalid User');
@@ -49,10 +55,18 @@ const Mutation = {
             return i.user !== args.id
         });
         db.postcomments = db.postcomments.filter(j => j.post !== args.id);
+
+        //console.log(newUser[0]);
+        pubsub.publish(`userSubscription`, {
+            user:{
+                mutation: 'Deleted',
+                data:newUser[0]
+            }
+        });
         return newUser;
 
     },
-    updateUserFromList(parent, args, { db }, info){
+    updateUserFromList(parent, args, { db, pubsub }, info){
         const  {id, name, email, age}  = args.data;
 
         const user = db.Users.find(i => i.id === id);
@@ -75,6 +89,13 @@ const Mutation = {
         if(typeof age !== 'undefined'){
             user.age = age;
         }
+
+        pubsub.publish(`userSubscription`, {
+            user:{
+                mutation: 'Updated', 
+                data:user
+            }
+        });
         return user;
 
     },

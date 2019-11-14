@@ -16,6 +16,7 @@
         count: Int!
         Comment(postid:ID!): Comment!
         post: blog!
+        user: UserSubscriptionType 
     }
     input updateUserFromListInput {
         id:ID!
@@ -58,4 +59,8 @@
         text : String!,
         author: User!,
         Bulletin: blog!        
+    }
+    type UserSubscriptionType{
+        mutation: String!,
+        data: User!
     }
