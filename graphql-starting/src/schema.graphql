@@ -15,6 +15,7 @@
     type Subscription {
         count: Int!
         Comment(postid:ID!): Comment!
+        post: blog!
     }
     input updateUserFromListInput {
         id:ID!

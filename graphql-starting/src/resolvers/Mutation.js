@@ -78,7 +78,7 @@ const Mutation = {
         return user;
 
     },
-    addPost(parent, args, { db }, info) {
+    addPost(parent, args, { db, pubsub }, info) {
         const checkExisting = db.Users.some(i => i.id === args.data.author);
         if (checkExisting) {
             const post = {
@@ -86,6 +86,9 @@ const Mutation = {
                 ...args.data
             }
             db.blogData.push(post);
+            pubsub.publish(`newPostSubscribe`, {
+                post
+            });
             return post;
         }
         else {
